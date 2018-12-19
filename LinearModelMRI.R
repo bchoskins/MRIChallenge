@@ -25,3 +25,5 @@ anova(linear_mod)
 af <- anova(linear_mod)
 afss <- af$"Sum Sq"
 print(cbind(af, PctEx=afss/sum(afss)*100))
+
+#trail commit from laptop
