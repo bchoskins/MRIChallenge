@@ -5,11 +5,8 @@ df[,2:124] <- as.data.frame(lapply(df[,2:124], as.numeric))
 row.names(df) <- df$X
 df <- df[,-1]
 
-
 linear_mod <- lm(residual_fluid_intelligence_score ~ ., data = df)
 summary(linear_mod)
-
-
 
 library(broom)
 tidied <- tidy(linear_mod)
