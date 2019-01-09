@@ -1,11 +1,10 @@
 #Linear Model
 
 df = read.delim2('MRIdata.csv', header = TRUE, sep = ",", dec = ",", stringsAsFactors = FALSE)
+df[,2:124] <- as.data.frame(lapply(df[,2:124], as.numeric))
 row.names(df) <- df$X
-df <- df[,-c(1,125:127)]
-df <- lapply(df, as.numeric)
+df <- df[,-1]
 
-df <- as.data.frame(df)
 
 linear_mod <- lm(residual_fluid_intelligence_score ~ ., data = df)
 summary(linear_mod)
