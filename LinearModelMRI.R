@@ -1,26 +1,39 @@
 #Linear Model
 
-df = read.delim2('trainingData.csv', header = TRUE, sep = ",", dec = ",", stringsAsFactors = FALSE)
-df[,2:124] <- as.data.frame(lapply(df[,2:124], as.numeric))
-row.names(df) <- df$X
-df <- df[,-1]
+training_set = read.delim2('trainingData.csv', header = TRUE, sep = ",", dec = ",", stringsAsFactors = FALSE)
+training_set[,2:124] <- as.data.frame(lapply(training_set[,2:124], as.numeric))
+row.names(training_set) <- training_set$X
+training_set <- training_set[,-1]
 
-linear_mod <- lm(residual_fluid_intelligence_score ~ ., data = df)
-summary(linear_mod)
+validation_set = read.delim2('validationData.csv', header = TRUE, sep = ",", dec = ",", stringsAsFactors = FALSE)
+validation_set[,2:124] <- as.data.frame(lapply(validation_set[,2:124], as.numeric))
+row.names(validation_set) <- validation_set$X
+validation_set <- validation_set[,-1]
 
-library(broom)
-tidied <- tidy(linear_mod)
-library(dplyr)
-tidied <- arrange(tidied, p.value)
+# Fitting Simple Linear Regression to the Training set
+regressor = lm(formula = residual_fluid_intelligence_score ~ .,
+               data = training_set)
+
+summary(regressor)
+anova(regressor)
+
+#prediciton 
+pred <- predict(regressor, validation_set)
+head(pred)
+head(validation_set)
+
+library(Metrics)
+rmse(validation_set$residual_fluid_intelligence_score, pred)
 
 
-plot(predict(linear_mod), df$residual_fluid_intelligence_score,
-     xlab="predicted", ylab="actual")
-abline(a=0,b=1)
 
-anova(linear_mod)
 
-af <- anova(linear_mod)
-afss <- af$"Sum Sq"
-print(cbind(af, PctEx=afss/sum(afss)*100))
+
+
+
+
+
+
+
+
 
